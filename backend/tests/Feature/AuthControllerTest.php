@@ -15,9 +15,11 @@ class AuthControllerTest extends TestCase
     public function test_register_ユーザーを登録できること()
     {
         $data = [
-            'username' => 'tekihei2317',
-            'email' => 'tekihei2317@example.com',
-            'password' => 'password',
+            'user' => [
+                'username' => 'tekihei2317',
+                'email' => 'tekihei2317@example.com',
+                'password' => 'password',
+            ]
         ];
 
         $this->postJson($this->basePath, $data)->assertCreated();
@@ -27,8 +29,10 @@ class AuthControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $data = [
-            'email' => $user->email,
-            'password' => 'password',
+            'user' => [
+                'email' => $user->email,
+                'password' => 'password',
+            ]
         ];
 
         $this->postJson("{$this->basePath}/login", $data)->assertOK();
@@ -61,7 +65,7 @@ class AuthControllerTest extends TestCase
             'bio' => 'bio'
         ];
 
-        $this->actingAs($user)->putJson("/api/user", $data)->assertOK();
+        $this->actingAs($user)->putJson("/api/user", ['user' => $data])->assertOK();
         $this->assertDatabaseHas('users', [
             'username' => $data['username'],
             'email' => $data['email'],

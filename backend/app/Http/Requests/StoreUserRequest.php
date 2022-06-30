@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
 
 class StoreUserRequest extends FormRequest
 {
@@ -24,9 +25,16 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|string|max:255|unique:users,username',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|max:255',
+            'user.username' => 'required|string|max:255|unique:users,username',
+            'user.email' => 'required|email|max:255|unique:users,email',
+            'user.password' => 'required|string|max:255',
         ];
+    }
+
+    public function makeUser(): array
+    {
+        $user = $this->validated()['user'];
+
+        return array_merge($user, ['password' => Hash::make($user['password'])]);
     }
 }

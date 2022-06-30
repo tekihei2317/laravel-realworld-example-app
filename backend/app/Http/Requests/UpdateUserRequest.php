@@ -7,31 +7,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
         /** @var App\Models\User */
         $currentUserId = auth()->user()->id;
 
         return [
-            'username' => ['sometimes', 'string', 'max:255', Rule::unique('users')->ignore($currentUserId)],
-            'email' => ['sometimes', 'email', 'max:255', Rule::unique('users')->ignore($currentUserId)],
-            'image' => 'sometimes|url',
-            'bio' => 'sometimes|string|max:2048'
+            'user.username' => ['sometimes', 'string', 'max:255', Rule::unique('users', 'username')->ignore($currentUserId)],
+            'user.email' => ['sometimes', 'email', 'max:255', Rule::unique('users', 'email')->ignore($currentUserId)],
+            'user.image' => 'sometimes|url',
+            'user.bio' => 'sometimes|string|max:2048'
         ];
     }
 }

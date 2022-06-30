@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function register(StoreUserRequest $request): JsonResponse
     {
-        $user = $this->userModel->create($request->validated());
+        $user = $this->userModel->create($request->makeUser());
 
         /** @var string */
         $token = auth()->login($user);
@@ -34,7 +34,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $token = auth()->attempt($request->validated());
+        $token = auth()->attempt($request->validated()['user']);
 
         if ($token) {
             return $this->userResource(auth()->user(), $token);
@@ -60,7 +60,7 @@ class AuthController extends Controller
     public function update(UpdateUserRequest $request)
     {
         $currentUser = auth()->user();
-        $currentUser->update($request->validated());
+        $currentUser->update($request->validated()['user']);
 
         return $this->userResource($currentUser, '');
     }
@@ -71,11 +71,13 @@ class AuthController extends Controller
     private function userResource(User $user, string $token): array
     {
         return [
-            'username' => $user->username,
-            'email' => $user->email,
-            'bio' => $user->bio,
-            'image' => $user->image,
-            'token' => $token,
+            'user' => [
+                'username' => $user->username,
+                'email' => $user->email,
+                'bio' => $user->bio,
+                'image' => $user->image,
+                'token' => $token,
+            ]
         ];
     }
 }
