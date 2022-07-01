@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Http\Resources\ArticleResource;
 use App\Http\Requests\StoreArticleRequest;
 use App\UseCases\StoreArticle;
+use Illuminate\Http\JsonResponse;
 
 class ArticleController extends Controller
 {
@@ -22,5 +23,13 @@ class ArticleController extends Controller
         $article = $storeArticle->run(auth()->user(), $request->validated()['article']);
 
         return ArticleResource::make($article);
+    }
+
+    /**
+     * 記事詳細を取得する
+     */
+    public function show(Article $article): JsonResponse
+    {
+        return response()->json(['article' => ArticleResource::make($article)]);
     }
 }

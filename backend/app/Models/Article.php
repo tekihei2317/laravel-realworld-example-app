@@ -12,6 +12,11 @@ class Article extends Model
 
     protected $fillable = ['title', 'description', 'body', 'slug'];
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     /** 記事の執筆者 */
     public function author(): BelongsTo
     {

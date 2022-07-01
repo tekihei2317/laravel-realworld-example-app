@@ -17,7 +17,11 @@ class ArticleFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id' => null,
+            'slug' => 'slug',
+            'title' => 'title',
+            'description' => 'description',
+            'body' => 'body',
         ];
     }
 }

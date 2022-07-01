@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Article;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -33,5 +34,16 @@ class ArticleControllerTest extends TestCase
 
         $response->assertCreated();
         $this->assertDatabaseCount('articles', 1);
+    }
+
+    /** @test */
+    public function show_記事を取得できること()
+    {
+        $article = Article::factory()->for($this->user, 'author')->create();
+
+        $response = $this->actingAs($this->user)->getJson($this->basePath . "/{$article->slug}");
+        logger($response->content());
+
+        $response->assertOk();
     }
 }
