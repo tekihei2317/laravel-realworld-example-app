@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,4 +26,6 @@ Route::post('/users/login', [AuthController::class, 'login']);
 Route::middleware('auth')->group(function () {
     Route::get('/user', [AuthController::class, 'show']);
     Route::put('/user', [AuthController::class, 'update']);
+
+    Route::resource('articles', ArticleController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
 });
