@@ -7,6 +7,7 @@ use App\UseCases\StoreArticle;
 use App\UseCases\UpdateArticle;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\ArticleResource;
+use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\DeleteArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
@@ -16,6 +17,14 @@ class ArticleController extends Controller
     public function __construct(
         private Article $articleModel,
     ) {
+    }
+
+    /**
+     * 記事を検索する
+     */
+    public function index(): ArticleCollection
+    {
+        return ArticleCollection::make($this->articleModel->filterByConditions()->get());
     }
 
     /**

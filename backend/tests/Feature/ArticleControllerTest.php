@@ -22,6 +22,16 @@ class ArticleControllerTest extends TestCase
     }
 
     /** @test */
+    public function index_記事一覧を取得できること()
+    {
+        $this->user->articles()->saveMany(Article::factory(30)->make());
+
+        $response = $this->getJson($this->basePath);
+
+        $response->assertOk();
+    }
+
+    /** @test */
     public function show_記事を取得できること()
     {
         $article = Article::factory()->for($this->user, 'author')->create();
