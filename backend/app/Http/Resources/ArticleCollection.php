@@ -15,8 +15,8 @@ class ArticleCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection,
-            'count' => 'TODO:',
+            'articles' => $this->collection,
+            'articlesCount' => 0,
         ];
     }
 }
