@@ -21,6 +21,6 @@ class DeleteArticleRequest extends FormRequest
 
     private function getArticle(): Article
     {
-        return $this->article;
+        return $this->route('article');
     }
 }
