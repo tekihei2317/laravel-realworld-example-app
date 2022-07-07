@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DeleteArticleRequest;
 use App\Models\Article;
+use App\UseCases\StoreArticle;
+use App\UseCases\UpdateArticle;
+use Illuminate\Http\JsonResponse;
 use App\Http\Resources\ArticleResource;
 use App\Http\Requests\StoreArticleRequest;
-use App\UseCases\StoreArticle;
-use Illuminate\Http\JsonResponse;
+use App\Http\Requests\DeleteArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -32,6 +34,16 @@ class ArticleController extends Controller
     public function show(Article $article): JsonResponse
     {
         return response()->json(['article' => ArticleResource::make($article)]);
+    }
+
+    /**
+     * 記事を更新する
+     */
+    public function update(Article $article, UpdateArticleRequest $request, UpdateArticle $updateArticle)
+    {
+        $updatedArticle = $updateArticle->run($article, $request->validated()['article']);
+
+        return ArticleResource::make($updatedArticle);
     }
 
     /**

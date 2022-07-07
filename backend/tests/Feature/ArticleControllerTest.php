@@ -22,6 +22,16 @@ class ArticleControllerTest extends TestCase
     }
 
     /** @test */
+    public function show_記事を取得できること()
+    {
+        $article = Article::factory()->for($this->user, 'author')->create();
+
+        $response = $this->actingAs($this->user)->getJson($this->basePath . "/{$article->slug}");
+
+        $response->assertOk();
+    }
+
+    /** @test */
     public function store_記事を登録できること()
     {
         $article = [
@@ -37,13 +47,20 @@ class ArticleControllerTest extends TestCase
     }
 
     /** @test */
-    public function show_記事を取得できること()
+    public function update_記事を更新できること()
     {
-        $article = Article::factory()->for($this->user, 'author')->create();
+        $article = Article::factory()->make();
+        $this->user->articles()->save($article);
+        $newArticleData = [
+            'title' => 'updated',
+            'description' => 'updated',
+            'body' => 'updated',
+        ];
 
-        $response = $this->actingAs($this->user)->getJson($this->basePath . "/{$article->slug}");
+        $response = $this->actingAs($this->user)->putJson($this->articlePath($article), ['article' => $newArticleData]);
 
         $response->assertOk();
+        $this->assertDatabaseHas('articles', $newArticleData);
     }
 
     /** @test */
