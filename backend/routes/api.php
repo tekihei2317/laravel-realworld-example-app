@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/users', [AuthController::class, 'register']);
 Route::post('/users/login', [AuthController::class, 'login']);
+Route::resource('articles', ArticleController::class)->only(['index', 'show']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/user', [AuthController::class, 'show']);
     Route::put('/user', [AuthController::class, 'update']);
+
+    Route::resource('articles', ArticleController::class)->only(['store', 'update', 'destroy']);
 });
