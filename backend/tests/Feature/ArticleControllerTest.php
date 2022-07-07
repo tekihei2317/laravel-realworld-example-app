@@ -42,8 +42,37 @@ class ArticleControllerTest extends TestCase
         $article = Article::factory()->for($this->user, 'author')->create();
 
         $response = $this->actingAs($this->user)->getJson($this->basePath . "/{$article->slug}");
-        logger($response->content());
 
         $response->assertOk();
+    }
+
+    /** @test */
+    public function destroy_記事を削除できること()
+    {
+        $article = Article::factory()->for($this->user, 'author')->create();
+
+        $response = $this->actingAs($this->user)->deleteJson($this->articlePath($article));
+
+        $response->assertOk();
+        $this->assertModelMissing($article);
+    }
+
+    /** @test */
+    public function destroy_他の人の記事は削除できないこと()
+    {
+        $article = Article::factory()->for($this->user, 'author')->create();
+
+        /** @var User */
+        $otherUser = User::factory()->create();
+        $response = $this->actingAs($otherUser)->deleteJson($this->articlePath($article));
+
+        $response->assertForbidden();
+        $this->assertModelExists($article);
+    }
+
+
+    private function articlePath(Article $article): string
+    {
+        return $this->basePath . "/{$article->slug}";
     }
 }

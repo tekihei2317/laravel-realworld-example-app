@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeleteArticleRequest;
 use App\Models\Article;
 use App\Http\Resources\ArticleResource;
 use App\Http\Requests\StoreArticleRequest;
@@ -31,5 +32,15 @@ class ArticleController extends Controller
     public function show(Article $article): JsonResponse
     {
         return response()->json(['article' => ArticleResource::make($article)]);
+    }
+
+    /**
+     * 記事を削除する
+     */
+    public function destroy(Article $article, DeleteArticleRequest $request): JsonResponse
+    {
+        $article->delete();
+
+        return response()->json();
     }
 }
