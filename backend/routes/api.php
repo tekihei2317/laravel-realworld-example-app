@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,4 +30,5 @@ Route::middleware('auth')->group(function () {
     Route::put('/user', [AuthController::class, 'update']);
 
     Route::resource('articles', ArticleController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('articles.comments', CommentController::class)->only(['index', 'store', 'destroy']);
 });
