@@ -10,6 +10,8 @@ class Comment extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['body', 'user_id'];
+
     /** コメントしたユーザー */
     public function author(): BelongsTo
     {
