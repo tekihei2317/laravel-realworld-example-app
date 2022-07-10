@@ -127,7 +127,7 @@ class ArticleControllerTest extends TestCase
         $article = Article::factory()->for($this->user, 'author')->create();
         Favorite::factory()->for($this->user)->for($article)->create();
 
-        $response = $this->actingAs($this->user)->deleteJson($this->articlePath($article) . '/unfavorite');
+        $response = $this->actingAs($this->user)->deleteJson($this->articlePath($article) . '/favorite');
 
         $response->assertOk();
         $this->assertDatabaseCount('favorites', 0);
