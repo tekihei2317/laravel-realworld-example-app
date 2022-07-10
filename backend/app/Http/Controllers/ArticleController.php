@@ -11,6 +11,8 @@ use App\Http\Resources\ArticleCollection;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\DeleteArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use App\UseCases\FavoriteArticle;
+use App\UseCases\UnfavoriteArticle;
 
 class ArticleController extends Controller
 {
@@ -63,5 +65,25 @@ class ArticleController extends Controller
         $article->delete();
 
         return response()->json();
+    }
+
+    /**
+     * 記事をお気に入りする
+     */
+    public function favorite(Article $article, FavoriteArticle $favoriteArticle): ArticleResource
+    {
+        $article = $favoriteArticle->run(auth()->user(), $article);
+
+        return ArticleResource::make($article);
+    }
+
+    /**
+     * 記事のお気に入りを解除する
+     */
+    public function unfavorite(Article $article, UnfavoriteArticle $unfavoriteArticle): ArticleResource
+    {
+        $article = $unfavoriteArticle->run(auth()->user(), $article);
+
+        return ArticleResource::make($article);
     }
 }

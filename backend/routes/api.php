@@ -31,4 +31,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('articles', ArticleController::class)->only(['store', 'update', 'destroy']);
     Route::resource('articles.comments', CommentController::class)->only(['index', 'store', 'destroy']);
+
+    Route::prefix('articles')->group(function () {
+        Route::post('/{article}/favorite', [ArticleController::class, 'favorite']);
+        Route::delete('/{article}/unfavorite', [ArticleController::class, 'unfavorite']);
+    });
 });
