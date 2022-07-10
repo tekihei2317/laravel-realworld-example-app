@@ -32,11 +32,11 @@ class ArticleController extends Controller
     /**
      * 記事を登録する
      */
-    public function store(StoreArticleRequest $request, StoreArticle $storeArticle): ArticleResource
+    public function store(StoreArticleRequest $request, StoreArticle $storeArticle): JsonResponse
     {
         $article = $storeArticle->run(auth()->user(), $request->validated()['article']);
 
-        return ArticleResource::make($article);
+        return $this->articleResponse($article, 201);
     }
 
     /**
@@ -44,17 +44,17 @@ class ArticleController extends Controller
      */
     public function show(Article $article): JsonResponse
     {
-        return response()->json(['article' => ArticleResource::make($article)]);
+        return $this->articleResponse($article);
     }
 
     /**
      * 記事を更新する
      */
-    public function update(Article $article, UpdateArticleRequest $request, UpdateArticle $updateArticle)
+    public function update(Article $article, UpdateArticleRequest $request, UpdateArticle $updateArticle): JsonResponse
     {
         $updatedArticle = $updateArticle->run($article, $request->validated()['article']);
 
-        return ArticleResource::make($updatedArticle);
+        return $this->articleResponse($article);
     }
 
     /**
@@ -70,20 +70,25 @@ class ArticleController extends Controller
     /**
      * 記事をお気に入りする
      */
-    public function favorite(Article $article, FavoriteArticle $favoriteArticle): ArticleResource
+    public function favorite(Article $article, FavoriteArticle $favoriteArticle): JsonResponse
     {
         $article = $favoriteArticle->run(auth()->user(), $article);
 
-        return ArticleResource::make($article);
+        return $this->articleResponse($article);
     }
 
     /**
      * 記事のお気に入りを解除する
      */
-    public function unfavorite(Article $article, UnfavoriteArticle $unfavoriteArticle): ArticleResource
+    public function unfavorite(Article $article, UnfavoriteArticle $unfavoriteArticle): JsonResponse
     {
         $article = $unfavoriteArticle->run(auth()->user(), $article);
 
-        return ArticleResource::make($article);
+        return $this->articleResponse($article);
+    }
+
+    private function articleResponse(Article $article, int $status = 200): JsonResponse
+    {
+        return response()->json(['article' => ArticleResource::make($article)], $status);
     }
 }
