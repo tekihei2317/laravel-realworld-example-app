@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Article extends Model
 {
@@ -32,11 +33,27 @@ class Article extends Model
         return $this->hasMany(Comment::class);
     }
 
+    /** タグ一覧 */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id');
+    }
+
     /**
      * 条件でフィルタリングする
      */
     public function filterByConditions(array $conditions = []): Builder
     {
-        return $this->query()->limit(20);
+        $query = self::query()->when(
+            isset($conditions['tag']),
+            fn (Builder $query) => $this->filterByRelation($query, 'tags', 'name', $conditions['tag'])
+        );
+
+        return $query;
+    }
+
+    private function filterByRelation(Builder $query, string $relation, string $column, $value): Builder
+    {
+        return $query->whereRelation($relation, $column, $value);
     }
 }
