@@ -25,11 +25,11 @@ class CommentController extends Controller
     /**
      * 記事にコメントを追加する
      */
-    public function store(Article $article, StoreCommentRequest $request, AddComment $addComment): CommentResource
+    public function store(Article $article, StoreCommentRequest $request, AddComment $addComment): JsonResponse
     {
         $comment = $addComment->run($article, auth()->user(), $request->validated()['comment']);
 
-        return CommentResource::make($comment);
+        return response()->json(['comment' => CommentResource::make($comment)]);
     }
 
     /**
