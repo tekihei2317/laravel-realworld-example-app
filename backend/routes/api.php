@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,4 +31,15 @@ Route::middleware('auth')->group(function () {
     Route::put('/user', [AuthController::class, 'update']);
 
     Route::resource('articles', ArticleController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('articles.comments', CommentController::class)->only(['index', 'store', 'destroy']);
+
+    Route::prefix('articles')->group(function () {
+        Route::post('/{article}/favorite', [ArticleController::class, 'favorite']);
+        Route::delete('/{article}/favorite', [ArticleController::class, 'unfavorite']);
+    });
+
+    Route::prefix('profiles')->group(function () {
+        Route::post('{profile}/follow', [ProfileController::class, 'follow']);
+        Route::delete('{profile}/follow', [ProfileController::class, 'unfollow']);
+    });
 });

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Article;
+use App\Models\Favorite;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -97,6 +98,40 @@ class ArticleControllerTest extends TestCase
         $this->assertModelExists($article);
     }
 
+    /** @test */
+    public function favorite_記事をお気に入りできること()
+    {
+        $article = Article::factory()->for($this->user, 'author')->create();
+
+        $response = $this->actingAs($this->user)->postJson($this->articlePath($article) . '/favorite');
+
+        $response->assertOk();
+        $this->assertDatabaseCount('favorites', 1);
+    }
+
+    /** @test */
+    public function favorite_2回お気に入りしても変化しないこと()
+    {
+        $article = Article::factory()->for($this->user, 'author')->create();
+
+        $this->actingAs($this->user)->postJson($this->articlePath($article) . '/favorite');
+        $response = $this->actingAs($this->user)->postJson($this->articlePath($article) . '/favorite');
+
+        $response->assertOk();
+        $this->assertDatabaseCount('favorites', 1);
+    }
+
+    /** @test */
+    public function unfavorite_記事のお気に入りを解除できること()
+    {
+        $article = Article::factory()->for($this->user, 'author')->create();
+        Favorite::factory()->for($this->user)->for($article)->create();
+
+        $response = $this->actingAs($this->user)->deleteJson($this->articlePath($article) . '/favorite');
+
+        $response->assertOk();
+        $this->assertDatabaseCount('favorites', 0);
+    }
 
     private function articlePath(Article $article): string
     {
