@@ -4,7 +4,7 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/users', [AuthController::class, 'register']);
 Route::post('/users/login', [AuthController::class, 'login']);
 
+Route::resource('profiles', ProfileController::class)->only(['show']);
 Route::middleware('auth')->group(function () {
     Route::get('/user', [AuthController::class, 'show']);
     Route::put('/user', [AuthController::class, 'update']);
@@ -42,3 +43,5 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);
 Route::resource('articles.comments', CommentController::class)->only(['index']);
+
+Route::resource('tags', TagController::class)->only(['index']);

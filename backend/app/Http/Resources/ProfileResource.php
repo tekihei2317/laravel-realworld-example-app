@@ -16,6 +16,17 @@ class ProfileResource extends JsonResource
             'username' => $user->username,
             'bio' => $user->bio,
             'image' => $user->image,
+            'following' => $this->isFollowing(auth()->user(), $user),
         ];
+    }
+
+    /**
+     * フォローしているかどうかを判定する
+     */
+    private function isFollowing(?User $currentUser, User $profile): bool
+    {
+        if ($currentUser === null) return false;
+
+        return $currentUser->followees->contains(fn (User $followingUser) => $followingUser->id === $profile->id);
     }
 }

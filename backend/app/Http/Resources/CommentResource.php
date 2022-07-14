@@ -16,8 +16,8 @@ class CommentResource extends JsonResource
         return [
             'id' => $comment->id,
             'body' => $comment->body,
-            'created_at' => $comment->created_at,
-            'updated_at' => $comment->updated_at,
+            'createdAt' => $comment->created_at,
+            'updatedAt' => $comment->updated_at,
             // TODO: ユーザーが削除された場合の処理
             'author' => ProfileResource::make($comment->author),
         ];

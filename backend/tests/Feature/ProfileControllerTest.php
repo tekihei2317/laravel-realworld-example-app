@@ -21,6 +21,13 @@ class ProfileControllerTest extends TestCase
         $this->user = User::factory()->create();
     }
 
+    public function show_ユーザー情報を取得できること()
+    {
+        $user = User::factory()->create();
+
+        $this->getJson($this->profilePath($user))->assertOk();
+    }
+
     /** @test */
     public function follow_ユーザーをフォローできること()
     {
