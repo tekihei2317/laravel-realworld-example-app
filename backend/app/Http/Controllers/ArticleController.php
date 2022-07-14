@@ -16,6 +16,8 @@ use App\UseCases\UnfavoriteArticle;
 
 class ArticleController extends Controller
 {
+    private array $articleResourceRelations = ['author', 'tags'];
+
     public function __construct(
         private Article $articleModel,
     ) {
@@ -26,7 +28,7 @@ class ArticleController extends Controller
      */
     public function index(): ArticleCollection
     {
-        return ArticleCollection::make($this->articleModel->filterByConditions()->orderByDesc('created_at')->get());
+        return ArticleCollection::make($this->articleModel->filterByConditions()->with($this->articleResourceRelations)->orderByDesc('created_at')->get());
     }
 
     /**
@@ -34,7 +36,7 @@ class ArticleController extends Controller
      */
     public function getFeed(): ArticleCollection
     {
-        return ArticleCollection::make($this->articleModel->getFeed(auth()->user())->get());
+        return ArticleCollection::make($this->articleModel->getFeed(auth()->user())->with($this->articleResourceRelations)->get());
     }
 
     /**
@@ -62,7 +64,7 @@ class ArticleController extends Controller
     {
         $updatedArticle = $updateArticle->run($article, $request->validated()['article']);
 
-        return $this->articleResponse($article);
+        return $this->articleResponse($updatedArticle);
     }
 
     /**
@@ -97,6 +99,8 @@ class ArticleController extends Controller
 
     private function articleResponse(Article $article, int $status = 200): JsonResponse
     {
+        $article->load($this->articleResourceRelations);
+
         return response()->json(['article' => ArticleResource::make($article)], $status);
     }
 }
