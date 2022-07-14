@@ -18,6 +18,7 @@ class UpdateArticleRequest extends FormRequest
             'article.title' => 'sometimes|required|string|max:255',
             'article.description' => 'sometimes|required|string|max:255',
             'article.body' => 'sometimes|required|string|max:10000',
+            'article.tagList' => 'sometimes|array',
         ];
     }
 

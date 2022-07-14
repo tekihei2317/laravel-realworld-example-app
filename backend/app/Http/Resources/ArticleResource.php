@@ -27,7 +27,7 @@ class ArticleResource extends JsonResource
             'tagList' => $article->tags->pluck('name')->toArray(),
             'createdAt' => $article->created_at,
             'updatedAt' => $article->updated_at,
-            'favorited' => $this->isFavoritedBy($article, auth()->user()), // TODO: 最大で合計いいね数の数だけループが回るので、SQLでやったほうがよさそう
+            'favorited' => $this->isFavoritedBy($article, auth()->user()), // FIXME: 最大で合計いいね数の数だけループが回るので、SQLでやったほうがよさそう
             'favoritesCount' => $article->favoriteUsers->count(),
             'author' => [
                 'username' => $author->username,

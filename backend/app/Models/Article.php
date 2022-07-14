@@ -36,7 +36,7 @@ class Article extends Model
     /** タグ一覧 */
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id');
+        return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id')->orderBy('name');
     }
 
     /** お気に入りしたユーザー一覧 */

@@ -8,13 +8,20 @@ use Illuminate\Support\Str;
 
 final class StoreArticle
 {
+    public function __construct(private UpdateArticleTags $updateArticleTags)
+    {
+    }
+
     /**
      * 記事を登録する
      */
-    public function run(User $author, array $article): Article
+    public function run(User $author, array $articleData): Article
     {
-        $article = $article + ['slug' => Str::slug($article['title'])];
+        $articleData += ['slug' => Str::slug($articleData['title'])];
 
-        return $author->articles()->create($article);
+        $article =  $author->articles()->create($articleData);
+        $this->updateArticleTags->run($article, $articleData['tagList'] ?? []);
+
+        return $article;
     }
 }
