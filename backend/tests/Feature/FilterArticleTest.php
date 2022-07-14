@@ -42,4 +42,40 @@ class FilterArticleTest extends TestCase
 
         $this->assertEquals($expected, $result->pluck('id')->toArray());
     }
+
+    /**
+     * @test
+     */
+    public function test_記事を執筆者で検索できること()
+    {
+        $author1 = User::factory()->create();
+        $author2 = User::factory()->create();
+
+        $article1 = Article::factory()->for($author1, 'author')->create();
+        $article2 = Article::factory()->for($author1, 'author')->create();
+        Article::factory()->for($author2, 'author')->create();
+
+        $result = (new Article)->filterByConditions(['author' => $author1->username]);
+        $expected = [$article1->id, $article2->id];
+
+        $this->assertEquals($expected, $result->pluck('id')->toArray());
+    }
+
+    /**
+     * @test
+     */
+    public function test_お気に入りした記事を取得できること()
+    {
+        $article1 = Article::factory()->for($this->user, 'author')->create();
+        $article2 = Article::factory()->for($this->user, 'author')->create();
+        Article::factory()->for($this->user, 'author')->create();
+
+        $article1->favoriteUsers()->attach($this->user);
+        $article2->favoriteUsers()->attach($this->user);
+
+        $result = (new Article)->filterByConditions(['favorited' => $this->user->username]);
+        $expected = [$article1->id, $article2->id];
+
+        $this->assertEquals($expected, $result->pluck('id')->toArray());
+    }
 }

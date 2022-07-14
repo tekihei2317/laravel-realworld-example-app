@@ -39,6 +39,12 @@ class Article extends Model
         return $this->belongsToMany(Tag::class, 'article_tag', 'article_id', 'tag_id');
     }
 
+    /** お気に入りしたユーザー一覧 */
+    public function favoriteUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'article_id', 'user_id');
+    }
+
     /**
      * 条件でフィルタリングする
      */
@@ -47,6 +53,12 @@ class Article extends Model
         $query = self::query()->when(
             isset($conditions['tag']),
             fn (Builder $query) => $this->filterByRelation($query, 'tags', 'name', $conditions['tag'])
+        )->when(
+            isset($conditions['author']),
+            fn (Builder $query) => $this->filterByRelation($query, 'author', 'username', $conditions['author'])
+        )->when(
+            isset($conditions['favorited']),
+            fn (Builder $query) => $this->filterByRelation($query, 'favoriteUsers', 'username', $conditions['favorited'])
         );
 
         return $query;
