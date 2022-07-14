@@ -16,7 +16,7 @@ use App\UseCases\UnfavoriteArticle;
 
 class ArticleController extends Controller
 {
-    private array $articleResourceRelations = ['author', 'tags'];
+    private array $articleResourceRelations = ['author', 'tags', 'favoriteUsers'];
 
     public function __construct(
         private Article $articleModel,
