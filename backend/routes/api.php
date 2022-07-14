@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('articles/feed', [ArticleController::class, 'getFeed']);
     Route::resource('articles', ArticleController::class)->only(['store', 'update', 'destroy']);
-    Route::resource('articles.comments', CommentController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('articles.comments', CommentController::class)->only(['store', 'destroy']);
 
     Route::prefix('articles')->group(function () {
         Route::post('/{article}/favorite', [ArticleController::class, 'favorite']);
@@ -45,3 +45,4 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);
+Route::resource('articles.comments', CommentController::class)->only(['index']);

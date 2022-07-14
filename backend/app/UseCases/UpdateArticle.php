@@ -12,9 +12,9 @@ final class UpdateArticle
      */
     public function run(Article $article, array $articleData): Article
     {
-        $article->title = $articleData['title'];
-        $article->description = $articleData['description'];
-        $article->body = $articleData['body'];
+        if (isset($articleData['title'])) $article->title = $articleData['title'];
+        if (isset($articleData['description'])) $article->description = $articleData['description'];
+        if (isset($articleData['body'])) $article->body = $articleData['body'];
         $article->save();
 
         return $article;
