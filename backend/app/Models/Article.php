@@ -70,7 +70,7 @@ class Article extends Model
     public function getFeed(User $user): Builder
     {
         $followingUsers = $user->followees;
-        $query = self::query()->whereIn('user_id', $followingUsers->pluck('id'));
+        $query = self::query()->whereIn('user_id', $followingUsers->pluck('id'))->orderByDesc('created_at');
 
         return $query;
     }
