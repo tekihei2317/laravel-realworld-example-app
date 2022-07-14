@@ -29,7 +29,7 @@ class CommentController extends Controller
     {
         $comment = $addComment->run($article, auth()->user(), $request->validated()['comment']);
 
-        return response()->json(['comment' => CommentResource::make($comment)]);
+        return response()->json(['comment' => CommentResource::make($comment)], 201);
     }
 
     /**

@@ -64,6 +64,17 @@ class Article extends Model
         return $query;
     }
 
+    /**
+     * フォローしているユーザーの記事一覧を取得する
+     */
+    public function getFeed(User $user): Builder
+    {
+        $followingUsers = $user->followees;
+        $query = self::query()->whereIn('user_id', $followingUsers->pluck('id'));
+
+        return $query;
+    }
+
     private function filterByRelation(Builder $query, string $relation, string $column, $value): Builder
     {
         return $query->whereRelation($relation, $column, $value);

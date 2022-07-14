@@ -30,6 +30,14 @@ class ArticleController extends Controller
     }
 
     /**
+     * フォローしているユーザーの記事一覧を取得する
+     */
+    public function getFeed(): ArticleCollection
+    {
+        return ArticleCollection::make($this->articleModel->getFeed(auth()->user())->get());
+    }
+
+    /**
      * 記事を登録する
      */
     public function store(StoreArticleRequest $request, StoreArticle $storeArticle): JsonResponse

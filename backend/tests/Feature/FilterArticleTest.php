@@ -24,7 +24,7 @@ class FilterArticleTest extends TestCase
     /**
      * @test
      */
-    public function test_記事をタグで検索できること()
+    public function 記事をタグで検索できること()
     {
         $tag1 = Tag::factory()->create(['name' => 'Laravel']);
         $tag2 = Tag::factory()->create(['name' => 'PHP']);
@@ -46,7 +46,7 @@ class FilterArticleTest extends TestCase
     /**
      * @test
      */
-    public function test_記事を執筆者で検索できること()
+    public function 記事を執筆者で検索できること()
     {
         $author1 = User::factory()->create();
         $author2 = User::factory()->create();
@@ -64,7 +64,7 @@ class FilterArticleTest extends TestCase
     /**
      * @test
      */
-    public function test_お気に入りした記事を取得できること()
+    public function お気に入りした記事を取得できること()
     {
         $article1 = Article::factory()->for($this->user, 'author')->create();
         $article2 = Article::factory()->for($this->user, 'author')->create();
