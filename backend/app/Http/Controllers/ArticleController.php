@@ -26,7 +26,15 @@ class ArticleController extends Controller
      */
     public function index(): ArticleCollection
     {
-        return ArticleCollection::make($this->articleModel->filterByConditions()->get());
+        return ArticleCollection::make($this->articleModel->filterByConditions()->orderByDesc('created_at')->get());
+    }
+
+    /**
+     * フォローしているユーザーの記事一覧を取得する
+     */
+    public function getFeed(): ArticleCollection
+    {
+        return ArticleCollection::make($this->articleModel->getFeed(auth()->user())->get());
     }
 
     /**

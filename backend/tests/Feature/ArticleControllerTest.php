@@ -33,6 +33,14 @@ class ArticleControllerTest extends TestCase
     }
 
     /** @test */
+    public function getFeed_フィードを取得できること()
+    {
+        $this->user->articles()->saveMany(Article::factory(30)->make());
+
+        $this->actingAs($this->user)->getJson($this->basePath . '/feed')->assertOk();
+    }
+
+    /** @test */
     public function show_記事を取得できること()
     {
         $article = Article::factory()->for($this->user, 'author')->create();
