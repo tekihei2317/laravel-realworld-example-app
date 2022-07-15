@@ -8,6 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ArticleResource extends JsonResource
 {
+    const RELATIONS = ['author', 'tags', 'favoriteUsers'];
+
     public function toArray($request)
     {
         /** @var Article */
