@@ -3,10 +3,14 @@
 namespace App\UseCases;
 
 use App\Models\Article;
-use App\Models\User;
+use App\UseCases\UpdateArticleTags;
 
 final class UpdateArticle
 {
+    public function __construct(private UpdateArticleTags $updateArticleTags)
+    {
+    }
+
     /**
      * 記事を更新する
      */
@@ -16,6 +20,8 @@ final class UpdateArticle
         if (isset($articleData['description'])) $article->description = $articleData['description'];
         if (isset($articleData['body'])) $article->body = $articleData['body'];
         $article->save();
+
+        $this->updateArticleTags->run($article, $articleData['tagList'] ?? []);
 
         return $article;
     }

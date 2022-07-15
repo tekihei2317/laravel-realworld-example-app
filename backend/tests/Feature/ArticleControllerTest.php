@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+use App\Models\User;
 use App\Models\Article;
 use App\Models\Favorite;
-use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class ArticleControllerTest extends TestCase
 {
@@ -57,6 +58,7 @@ class ArticleControllerTest extends TestCase
             'title' => 'type-challengesのオンラインジャッジを作りました',
             'description' => 'テスト',
             'body' => 'type-challengesのオンラインジャッジを作ったので、紹介したいと思います。',
+            'tagList' => ['typescript', 'react'],
         ];
 
         $response = $this->actingAs($this->user)->postJson($this->basePath, ['article' => $article]);
@@ -74,12 +76,13 @@ class ArticleControllerTest extends TestCase
             'title' => 'updated',
             'description' => 'updated',
             'body' => 'updated',
+            'tagList' => ['typescript', 'react'],
         ];
 
         $response = $this->actingAs($this->user)->putJson($this->articlePath($article), ['article' => $newArticleData]);
 
         $response->assertOk();
-        $this->assertDatabaseHas('articles', $newArticleData);
+        $this->assertDatabaseHas('articles', Arr::except($newArticleData, 'tagList'));
     }
 
     /** @test */
